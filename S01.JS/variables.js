@@ -16,7 +16,7 @@ const resultat = addition(4,6);
 console.log(resultat);
 
 function creerMessage(nom, age) {
-    return `Mon nom est ${nom} et j'ai ${age} ans`;
+    return `Mon nom est ${nom} et j'ai ${age} ans;`
 }
 
 console.log(creerMessage(prenom, age));
