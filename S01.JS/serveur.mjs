@@ -1,10 +1,10 @@
 import { createServer } from 'node:http'; //using ou #include
 
 const premierServeur = createServer((request, response) => {
-    console.log('Nous sommes dans le code du serveur');
-    response.statusCode = 200;
-    response.setHeader('Content-Type', 'text/plain');
-    response.end('Mon premier serveur');
+    console.log(`Nous sommes dans le code du serveur ${request.url}`);
+    response.statusCode = 200; //200 = OK
+    response.setHeader('Content-Type', 'text/html');
+    response.end(`Bonjour <strong>${request.url.substring(1)}</strong>`);
 });
 
 
