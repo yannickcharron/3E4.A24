@@ -10,8 +10,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const app = express();
+app.use(express.json());
 
-app.use(planetsRoutes);
+app.use('/planets', planetsRoutes);
 
 //Route: /status
 app.get('/status', (req, res) => {
