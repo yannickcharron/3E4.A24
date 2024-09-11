@@ -1,8 +1,9 @@
+import { env } from 'node:process';
 import chalk from 'chalk';
 
 import app from './src/app.js';
 
-const PORT = 3000;
+const PORT = env.PORT;
 
 app.listen(PORT, (err) => {
     // Notre serveur est démarré
