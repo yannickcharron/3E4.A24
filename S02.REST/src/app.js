@@ -8,6 +8,8 @@ import timezone from 'dayjs/plugin/timezone.js';
 
 import planetsRoutes from './routes/planets.routes.js';
 
+import errors from './middlewares/errors.js'
+
 database();
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -22,6 +24,6 @@ app.get('/status', (req, res) => {
   res.status(200).end();
 });
 
-
+app.use(errors);
 
 export default app;

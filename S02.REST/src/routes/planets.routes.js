@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import HttpErrors from 'http-errors'
 
 import PLANETS from '../data/planets.js';
 
@@ -6,33 +7,36 @@ import planetRepository from '../repositories/planet.repository.js';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const planets = await planetRepository.retrieveAll();
     res.status(200).json(planets);
   } catch (err) {
-    res.status(500).end();
+    return next(err);
   }
 });
 
 //: devant dans l'url => paramètre
-router.get('/:idPlanet', (req, res) => {
-  const idPlanet = parseInt(req.params.idPlanet, 10);
-  // const planets = PLANETS.filter(p => p.id === idPlanet); //Filter retourne un tableau
-  // if(planets.length > 0) {
-  //     // Le id existe (planet existe)
-  //     res.status(200).json(planets[0]);
-  // } else {
-  //     // Le id existe pas
-  //     res.status(404).end();
-  // }
+router.get('/:uuidPlanet', async (req, res, next) => {
 
-  const planet = PLANETS.find((p) => p.id === idPlanet);
-  if (planet) {
+  //next = égale la gestion des erreurs
+  try {
+    //1. Trouver en base de données la planète avec uuid reçu en paramètre
+    const planet = await planetRepository.retrieveByUUID(req.params.uuidPlanet);
+
+    //2. La planète voulue n'existe pas
+    if(!planet) {
+      //Erreur 404
+      return next(HttpErrors.NotFound(`Planet with uuid : ${req.params.uuidPlanet} not found`));
+    }
+
+    //3. Si l'existe envoyer la planète dans la réponse au client
     res.status(200).json(planet);
-  } else {
-    res.status(404).end();
+  } catch (err) {
+    //Gestion d'erreur
+    return next(err);
   }
+
 });
 
 router.post('/', (req, res) => {

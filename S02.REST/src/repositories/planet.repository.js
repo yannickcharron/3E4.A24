@@ -6,6 +6,10 @@ class PlanetRepository {
         return Planet.find()
     }
 
+    retrieveByUUID(uuidPlanet) {
+        return Planet.findOne({uuid: uuidPlanet})
+    }
+
 }
 
 export default new PlanetRepository();
