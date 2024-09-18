@@ -5,11 +5,32 @@ import PLANETS from '../data/planets.js';
 
 import planetRepository from '../repositories/planet.repository.js';
 
+import methodMiddleware from '../middlewares/method.js';
+
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', methodMiddleware, async (req, res, next) => {
   try {
-    const planets = await planetRepository.retrieveAll();
+
+    const transformOptions = {};
+
+    if(req.query.unit) {
+      if(req.query.unit === 'c') {
+        transformOptions.unit = 'c';
+      } else if(req.query.unit !== 'k') {
+        return next(HttpErrors.BadRequest('Le paramètre unit doit être c ou k'));
+      }
+    }
+
+    let planets = await planetRepository.retrieveAll();
+    planets = planets.map(p => {
+      p = p.toObject({getters: false, virtuals: false}); //Transforme la planète de la base de donnée en objet JS
+      p = planetRepository.transform(p, transformOptions);
+      return p;
+    });
+
+
+    console.log(req.info);
     res.status(200).json(planets);
   } catch (err) {
     return next(err);
@@ -22,7 +43,7 @@ router.get('/:uuidPlanet', async (req, res, next) => {
   //next = égale la gestion des erreurs
   try {
     //1. Trouver en base de données la planète avec uuid reçu en paramètre
-    const planet = await planetRepository.retrieveByUUID(req.params.uuidPlanet);
+    let planet = await planetRepository.retrieveByUUID(req.params.uuidPlanet);
 
     //2. La planète voulue n'existe pas
     if(!planet) {
@@ -31,6 +52,8 @@ router.get('/:uuidPlanet', async (req, res, next) => {
     }
 
     //3. Si l'existe envoyer la planète dans la réponse au client
+    planet = planet.toObject({getters: false, virtuals: false});
+    planet = planetRepository.transform(planet);
     res.status(200).json(planet);
   } catch (err) {
     //Gestion d'erreur
