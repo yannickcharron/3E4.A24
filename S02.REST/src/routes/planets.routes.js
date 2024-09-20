@@ -62,30 +62,45 @@ router.get('/:uuidPlanet', async (req, res, next) => {
 
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res, next) => {
   const newPlanet = req.body;
+  const isEmpty = Object.keys(newPlanet).length === 0;
 
-  if (newPlanet) {
-    //On n'ajoute pas une planète vide
-    const planet = PLANETS.find((p) => p.id === newPlanet.id);
-    if (planet) {
-      //Une planète possède le id de la nouvelle planète => Pas d'ajout possible
-      return res.status(409).end();
-    }
+  if(isEmpty) {
+    return next(HttpErrors.BadRequest('La planète doit contenir au moins une propriété'));
+  }
 
-    PLANETS.push(newPlanet);
-    res.status(201).json(newPlanet);
+  try {
+
+    //1. Essayer de mettre la planète en base de données
+    let planet = await planetRepository.create(newPlanet);
+
+    //2. Transformer la planète avant de la retourner
+    planet = planet.toObject({getters:false, virtuals:false});
+    planet = planetRepository.transform(planet);
+
+    //3. Retourner une réponse -> 201 CREATED
+    res.status(201).json(planet);
+
+  } catch(err) {
+    return next(err);
   }
 });
 
-router.delete('/:idPlanet', (req, res) => {
-  const index = PLANETS.findIndex((p) => p.id === parseInt(req.params.idPlanet, 10));
-  if (index === -1) {
-    return res.status(404).end();
+router.delete('/:uuidPlanet', async (req, res, next) => {
+  try {
+    const planet = await planetRepository.deleteByUUID(req.params.uuidPlanet);
+    
+    if(!planet) {
+      return next(HttpErrors.NotFound(`La planète avec le uuid: ${req.params.uuidPlanet} n'existe pas.`));
+    }
+    //No Content
+    res.status(204).end();
+
+  } catch(err) {
+    return next(err);
   }
 
-  //La planète existe
-  PLANETS.splice(index, 1);
   res.status(204).end();
 });
 

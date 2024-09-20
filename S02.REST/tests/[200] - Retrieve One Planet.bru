@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/planets/a5f11be9-8119-4366-855d-661715b83f15
+  url: http://localhost:3000/planets/2f9306fc-605d-45f3-9bbb-3c3ba5f13cf5
   body: none
   auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body: isJson
 }

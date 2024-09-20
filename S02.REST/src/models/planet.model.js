@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const planetSchema = mongoose.Schema(
   {
     name: { type: String, unique: true, required: true },
-    uuid: { type: String, unique: true, required: true },
+    uuid: { type: String, unique: true, required: true, default: uuidv4() },
     discoveredBy: { type: String, required: true, index: true },
     discoveryDate: Date,
     temperature: { type: Number, min: 0, max: 10000 },

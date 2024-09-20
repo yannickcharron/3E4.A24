@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/planets
+  url: http://localhost:3000/planets?unit=c
   body: none
   auth: none
+}
+
+params:query {
+  unit: c
 }
 
 assert {
