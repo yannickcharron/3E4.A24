@@ -40,6 +40,46 @@
           <ul id="satellites"></ul>
         </div>
       </div>
+      <div class="row">
+        <h2>Portals</h2>
+        <div class="col-9">
+            <table id="portals" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Position</th>
+                  <th scope="col">Affinity</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+        </div>
+        <div class="col-3">
+          <h5>Découverte d'un portal</h5>
+          <div class="form-group">
+            <label for="txtPortalPosition" class="form-label">Position</label>
+            <input type="text" class="form-control" id="txtPortalPosition">
+          </div>
+          <div class="form-group">
+            <label for="dtlAffinity" class="form-label">Affinity</label>
+            <input class="form-control" id="dtlAffinity" list="dtlAffinityOptions" />
+            <datalist id="dtlAffinityOptions">
+              <option>air</option>
+              <option>darkness</option>
+              <option>earth</option>
+              <option>energy</option>
+              <option>fire</option>
+              <option>life</option>
+              <option>light</option>
+              <option>logic</option>
+              <option>music</option>
+              <option>space</option>
+              <option>toxic</option>
+              <option>water</option>
+            </datalist>
+            <button id="btnAddPortal" class="btn btn-primary mt-1">Ajouter le portal</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
