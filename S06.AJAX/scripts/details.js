@@ -10,7 +10,15 @@ $(document).ready(() => {
         addPortal();
     })
 
+    $('#btnExtraction').click(() => {
+        extraction();
+    })
+
 });
+
+function extraction() {
+    
+}
 
 async function addPortal() {
 
