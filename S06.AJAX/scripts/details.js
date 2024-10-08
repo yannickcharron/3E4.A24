@@ -1,4 +1,6 @@
+import { ELEMENT_IMG_URL} from './constants.js';
 import { extractUrlParams } from './urlParams.js';
+
 
 const urlParams = extractUrlParams();
 
@@ -11,12 +13,29 @@ $(document).ready(() => {
     })
 
     $('#btnExtraction').click(() => {
-        extraction();
+        extraction(linkPlanet);
     })
 
 });
 
-function extraction() {
+async function extraction(url) {
+
+    const miningUrl = `${url}/actions?type=mine`;
+
+    const response = await axios.get(miningUrl);
+    const extraction = response.data;
+
+    let extractionHtml = '';
+    extraction.forEach((e) => {
+        extractionHtml += '<tr>';
+        extractionHtml += `<td><img class="element" src="${ELEMENT_IMG_URL}/${e.element}.png" /> ${e.element}</td><td>${e.quantity}</td>`;
+        extractionHtml += '</tr>';
+    });
+
+    
+    console.log(extraction);
+
+    $('#extraction tbody').html(extractionHtml);
     
 }
 

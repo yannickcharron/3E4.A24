@@ -16,3 +16,8 @@
 #imgPlanet {
     width: 128px;
 }
+
+.element {
+    width: 64px;
+    height: auto;
+}

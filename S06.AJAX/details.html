@@ -41,28 +41,26 @@
         </div>
       </div>
       <div class="row">
-        <button id="btnExtraction" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#extractionModal">
-          Extraction
-        </button>
+        <button id="btnExtraction" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#extractionModal">Extraction</button>
       </div>
       <div class="row">
         <h2>Portals</h2>
         <div class="col-9">
-            <table id="portals" class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Position</th>
-                  <th scope="col">Affinity</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+          <table id="portals" class="table">
+            <thead>
+              <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Affinity</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
         <div class="col-3">
           <h5>Découverte d'un portal</h5>
           <div class="form-group">
             <label for="txtPortalPosition" class="form-label">Position</label>
-            <input type="text" class="form-control" id="txtPortalPosition">
+            <input type="text" class="form-control" id="txtPortalPosition" />
           </div>
           <div class="form-group">
             <label for="dtlAffinity" class="form-label">Affinity</label>
@@ -95,7 +93,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!-- TODO Exercice dans 2 minutes -->
+          <table id="extraction" class="table">
+            <thead>
+              <tr>
+                <th scope="col">Element</th>
+                <th scope="col">Quantity</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
