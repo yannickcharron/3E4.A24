@@ -34,9 +34,35 @@ async function extraction(url) {
 
     
     console.log(extraction);
+    saveInventory(extraction);
 
     $('#extraction tbody').html(extractionHtml);
     
+}
+
+function saveInventory(extraction) {
+
+    let inventory = JSON.parse(localStorage.getItem('inventory'));
+
+    if(!inventory) {
+        inventory = [];
+    }
+
+    extraction.forEach(item => {
+        const inventoryLocalStorageItem = inventory.find(i => i.element === item.element);
+        if(inventoryLocalStorageItem) {
+            //Déjà présent
+            inventoryLocalStorageItem.quantity += item.quantity
+        } else {
+            //Pas présent
+            inventory.push(item);
+        }
+
+        localStorage.setItem('inventory', JSON.stringify(inventory));
+        console.log(localStorage.getItem('inventory'));
+
+    }) 
+
 }
 
 async function addPortal() {

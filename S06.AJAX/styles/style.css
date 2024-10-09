@@ -21,3 +21,9 @@
     width: 64px;
     height: auto;
 }
+
+.element-quantity {
+    font-family: "Alegreya Sans", sans-serif;
+    font-weight: bold;
+    font-size: 1.5em;
+}
