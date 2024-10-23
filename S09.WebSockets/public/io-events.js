@@ -1,4 +1,6 @@
 export default {
     CONNECTION: 'connection',
-    DISCONNECT: 'disconnect'
+    DISCONNECT: 'disconnect',
+    SEND_MESSAGE: 'send-message',
+    SEND_BACK_MESSAGE : 'send-back-message'
 };
