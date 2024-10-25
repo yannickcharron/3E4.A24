@@ -48,8 +48,15 @@ socketServer.on(IOEVENTS.CONNECTION, client => {
 
   });
 
+  client.on(IOEVENTS.UPDATE_USERNAME, updateInfos => {
+    client.data.username = updateInfos.username;
+    sendUserIdentities();
+
+  })
+
   client.on(IOEVENTS.DISCONNECT, reason => {
     console.log(reason);
+    sendUserIdentities();
   })
 
 });

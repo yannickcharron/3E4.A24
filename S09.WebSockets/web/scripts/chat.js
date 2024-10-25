@@ -14,10 +14,14 @@ $(document).ready(() => {
   });
 
   $('#btnUpdateUsername').click(() => {
-    //TODO: Exercice
-
+    updateUsername();
   });
 });
+
+function updateUsername() {
+  const username = $("#txtUsername").val();
+  socket.emit(IOEVENTS.UPDATE_USERNAME, { username: username });
+}
 
 function sendMessage() {
   const messageToSend = {
