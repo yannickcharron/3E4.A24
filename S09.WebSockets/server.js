@@ -26,13 +26,18 @@ app.use(express.static('public'));
 //TODO: Connexion des clients
 socketServer.on(IOEVENTS.CONNECTION, client => {
   console.log(client.id);
+  newUser(client);
 
   //Réception de SEND_MESSAGE
   client.on(IOEVENTS.SEND_MESSAGE, message => {
     console.log(message);
     //Nouveau message reçu d'un client
     const newMessageToBroadcast = {
-      sender: client.id,
+      sender: {
+        id: client.id,
+        username: client.data.username,
+        avatar: client.data.avatar
+      },
       text : message.text,
       datetime: dayjs.utc()
     };
@@ -49,9 +54,21 @@ socketServer.on(IOEVENTS.CONNECTION, client => {
 
 });
 
-async function newUser(socket) {}
+async function newUser(socket) {
+  socket.data.username = 'Anonyme';
+  socket.data.avatar =  randomAvatarImage();
 
-async function sendUserIdentities() {}
+  sendUserIdentities();
+}
+
+async function sendUserIdentities() {
+  const clients = await socketServer.fetchSockets();
+  const clientsDatas = clients.map(c => c.data);
+
+  //clientsData peut être volumineux si plusieurs clients connectés 
+  socketServer.emit(IOEVENTS.REFRESH_USERS, clientsDatas);
+
+}
 
 function randomAvatarImage() {
   const avatarNumber = Math.floor(Math.random() * 8 + 1);

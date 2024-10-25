@@ -13,7 +13,10 @@ $(document).ready(() => {
     }
   });
 
-  $('#btnUpdateUsername').click(() => {});
+  $('#btnUpdateUsername').click(() => {
+    //TODO: Exercice
+
+  });
 });
 
 function sendMessage() {
@@ -26,9 +29,17 @@ function sendMessage() {
 
 //TODO: Réceptions des évenements
 socket.on(IOEVENTS.SEND_BACK_MESSAGE, (message) => {
-  const messageLi = createMessageUI(message, message.sender === socket.id);
+  const messageLi = createMessageUI(message, message.sender.id === socket.id);
   $('#chat-messages').append(messageLi);
 });
+
+socket.on(IOEVENTS.REFRESH_USERS, clientsDatas => {
+
+  $(".users").empty();
+  clientsDatas.forEach(clientData => {
+    $(".users").append(createUserUI(clientData));
+  });
+})
 
 function createMessageUI(message, isFromMe) {
   let messageLi = '';
@@ -38,15 +49,15 @@ function createMessageUI(message, isFromMe) {
                 <div class='chat-hour'>${dayjs(message.datetime).format()}<span class='fa fa-check-circle'></span></div>
                 <div class='chat-text'>${message.text}</div>
                 <div class='chat-avatar'>
-                    <img src='' alt=''>
-                    <div class='chat-name'>NAME</div>
+                    <img src='${message.sender.avatar}' alt=''>
+                    <div class='chat-name'>${message.sender.username}</div>
                 </div>
             </li>`;
   } else {
     messageLi = `<li class='chat-left'>
             <div class='chat-avatar'>
-            <img src='' alt=''>
-            <div class='chat-name'>NAME</div>
+            <img src='${message.sender.avatar}' alt=''>
+            <div class='chat-name'>${message.sender.username}</div>
             </div>  
             <div class='chat-text'>${message.text}</div>
             <div class='chat-hour'>${dayjs(message.datetime).format()}<span class='fa fa-check-circle'></span></div>
@@ -59,10 +70,10 @@ function createMessageUI(message, isFromMe) {
 function createUserUI(user) {
   const userLi = `<li class='person' data-chat='ID'>
             <div class='user'>
-                <img src='' alt=''>
+                <img src='${user.avatar}' alt='${user.username}'>
             </div>
             <p class='name-time'>
-                <span class='name'>NAME</span>
+                <span class='name'>${user.username}</span>
             </p>
         </li>`;
 
