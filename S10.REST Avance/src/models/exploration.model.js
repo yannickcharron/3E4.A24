@@ -3,7 +3,24 @@ import { v4 as uuidv4 } from 'uuid';
 
 const explorationSchema = mongoose.Schema(
   {
-    //TODO: Faire le schema d'une exploration
+    explorationDate: { type: Date, default: Date.now, required: true},
+    uuid: {type: String, unique:true, required: true, default: () => uuidv4() },
+    planet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Planet',
+      required: true
+    },
+    coord:{
+      lon: Number,
+      lat: Number
+    },
+    scans: [
+      {
+        element: String,
+        percent: Number
+      }
+    ],
+    comment: String
   },
   {
     collection: 'explorations',

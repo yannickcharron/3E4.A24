@@ -23,7 +23,7 @@ body:json {
       },
       "temperature":42,
       "satellites": [],
-      "name": "planete-5",
+      "name": "planete-{{planet-no}}",
       "discoveredBy": "YellowKiwi",
       "discoveryDate": "2024-10-29"
   }
@@ -32,4 +32,8 @@ body:json {
 assert {
   res.status: eq 201
   res.body: isJson
+}
+
+script:pre-request {
+  bru.setEnvVar('planet-no', Math.floor(Math.random() * 9999999999));
 }

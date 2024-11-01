@@ -20,7 +20,8 @@ const planetSchema = mongoose.Schema({
     id:false
 });
 
-//TODO: Virtual
+//TODO: Virtual Pas terminé
+planetSchema.virtual('explorations')
   
 
 export default mongoose.model('Planet', planetSchema);
