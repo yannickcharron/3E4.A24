@@ -1,0 +1,21 @@
+{
+  "name": "s10.rest",
+  "version": "1.0.0",
+  "description": "Serveur pour le cours 420-3E4-JR lors de la session d'automne 2024",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env server.js ",
+    "dev": "node --env-file=.env --watch server.js"
+  },
+  "author": "Yannick Charron",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "dayjs": "^1.11.13",
+    "express": "^4.21.1",
+    "http-errors": "^2.0.0",
+    "mongoose": "^8.7.3",
+    "uuid": "^10.0.0"
+  }
+}
