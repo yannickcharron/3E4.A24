@@ -16,5 +16,6 @@ params:query {
 
 assert {
   res.status: eq 200
-  res.body: isJson 
+  res.body: isJson
+  res.body.temperature: eq -7.15
 }

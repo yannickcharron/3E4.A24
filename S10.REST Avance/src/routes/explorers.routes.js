@@ -2,13 +2,13 @@ import express from 'express';
 
 import planetRepository from '../repositories/planet.repository.js';
 
+import { handleTemperatureUnitURLParam } from '../middlewares/temperature.unit.middleware.js';
+
 const router = express.Router();
 
-router.get('/:explorerName', getPlanetsDiscoveredBy);
+router.get('/:explorerName', handleTemperatureUnitURLParam, getPlanetsDiscoveredBy);
 
 async function getPlanetsDiscoveredBy(req, res, next) {
-
-  //TODO: Permettre l'utilisation du paramètre unit dans l'URL
 
   try {
     const criteria = { discoveredBy: req.params.explorerName };
@@ -16,7 +16,7 @@ async function getPlanetsDiscoveredBy(req, res, next) {
 
     planets = planets.map((p) => {
       p = p.toObject({ getters: false, virtuals: false });
-      p = planetRepository.transform(p);
+      p = planetRepository.transform(p, req.transformOptions);
       return p;
     });
 

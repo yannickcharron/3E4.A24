@@ -3,23 +3,23 @@ import HttpError from 'http-errors';
 
 import planetRepository from '../repositories/planet.repository.js';
 
+import { handleTemperatureUnitURLParam } from '../middlewares/temperature.unit.middleware.js';
+
 const router = express.Router();
 
 router.post('/', post);
-router.get('/', getAll);
-router.get('/:uuidPlanet', getOne);
+router.get('/', handleTemperatureUnitURLParam, getAll);
+router.get('/:uuidPlanet', handleTemperatureUnitURLParam, getOne);
 router.delete('/:uuidPlanet', deleteOne);
 
 async function getAll(req, res, next) {
-
-  //TODO: Permettre l'utilisation du paramètre unit dans l'URL
 
   try {
     let planets = await planetRepository.retrieveAll();
 
     planets = planets.map((p) => {
       p = p.toObject({ getters: false, virtuals: false });
-      p = planetRepository.transform(p);
+      p = planetRepository.transform(p, req.transformOptions);
       return p;
     });
 
@@ -32,18 +32,6 @@ async function getAll(req, res, next) {
 async function getOne(req, res, next) {
   try {
     
-    const transformOptions = {};
-
-    //Validation du paramètre d'URL unit
-    if (req.query.unit) {
-      const unit = req.query.unit;
-      if (unit === 'c') {
-        transformOptions.unit = unit;
-      } else {
-        throw HttpError.BadRequest(`Le paramètre unit doit avoir la valeur c, valeur entrée ${unit}`);
-      }
-    }
-
     const retrieveOptions = {};
     const uuidPlanet = req.params.uuidPlanet;
 
@@ -54,7 +42,7 @@ async function getOne(req, res, next) {
     }
 
     planet = planet.toObject({ getters: false, virtuals: true });
-    planet = planetRepository.transform(planet, transformOptions);
+    planet = planetRepository.transform(planet, req.transformOptions);
 
     res.status(200).json(planet);
   } catch (err) {
