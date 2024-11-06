@@ -1,0 +1,20 @@
+meta {
+  name: [400] - page plus petit 0
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/explorations?page=-4
+  body: none
+  auth: none
+}
+
+params:query {
+  page: -4
+}
+
+assert {
+  res.status: eq 400
+  res.body: isJson 
+}

@@ -17,7 +17,8 @@ const explorationSchema = mongoose.Schema(
     scans: [
       {
         element: String,
-        percent: Number
+        percent: Number,
+        _id: false
       }
     ],
     comment: String
