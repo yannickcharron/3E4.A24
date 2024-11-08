@@ -5,16 +5,12 @@ meta {
 }
 
 get {
-  url: {{base_url}}/explorations?page=43
+  url: {{base_url}}/explorations/ab8e4262-222f-4d52-af57-1d477d9b315f
   body: none
   auth: none
 }
 
-params:query {
-  page: 43
-}
-
 assert {
   res.status: eq 200
-  res.body: isArray
+  res.body: isJson 
 }

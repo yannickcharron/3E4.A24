@@ -10,16 +10,15 @@ class ExplorationsRepository {
         const limit = retrieveOptions.limit;
         const skip = retrieveOptions.skip;
 
-        return Exploration.find().limit(limit).skip(skip);
+        const retrieveQuery = Exploration.find().limit(limit).skip(skip).sort({'explorationDate': 'desc'});
+        const countQuery = Exploration.countDocuments();
 
-    }
+        return Promise.all([retrieveQuery, countQuery]);
 
-    count() {
-        return Exploration.estimatedDocumentCount();
     }
 
     retrieveByUUID(explorationUUID, retrieveOptions) {
-
+        return Exploration.findOne({uuid: explorationUUID});
     }
 
     transform(exploration, retrieveOptions = {}, transformOptions = {}) {
