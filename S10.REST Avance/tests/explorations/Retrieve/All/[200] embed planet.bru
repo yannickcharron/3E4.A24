@@ -1,0 +1,21 @@
+meta {
+  name: [200] embed planet
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/explorations?page=43&embed=planet
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 43
+  embed: planet
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

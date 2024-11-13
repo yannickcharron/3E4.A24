@@ -12,8 +12,11 @@ class PlanetRepository {
     return Planet.find(criteria);
   }
 
-  retrieveByUUID(planetUUID, retrieveOptions) {
+  retrieveByUUID(planetUUID, options) {
     const retrieveQuery = Planet.findOne({ uuid: planetUUID });
+    if(options.explorations) {
+      retrieveQuery.populate('explorations');
+    }
     return retrieveQuery;
   }
 

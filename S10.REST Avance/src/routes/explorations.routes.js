@@ -13,18 +13,28 @@ router.get('/', handlePageURLParam, paginate.middleware(20, 50), getAll);
 router.get('/:uuidExploration', getOne);
 
 async function getAll(req, res, next) {
-  const retrieveOptions = {
+  let filter = { };
+  const options = {
     limit: req.query.limit,
     skip: req.skip,
   };
 
+  if(req.query.embed && req.query.embed === 'planet') {
+    options.planet = true;
+  }
+
+  if(req.query.element) {
+    filter = { 'scans.element' : req.query.element }
+  }
+
+
   try {
     const responseBody = {};
 
-    let [explorations, totalDocuments] = await explorationsRepository.retrieveByCriteria({}, retrieveOptions);
+    let [explorations, totalDocuments] = await explorationsRepository.retrieveByCriteria(filter, options);
     explorations = explorations.map((e) => {
       e = e.toObject({ getters: false, virtuals: false });
-      e = explorationsRepository.transform(e);
+      e = explorationsRepository.transform(e, options);
       return e;
     });
 
@@ -67,14 +77,21 @@ async function getAll(req, res, next) {
 }
 
 async function getOne(req, res, next) {
+  
+  const options = {};
   try {
-    let exploration = await explorationsRepository.retrieveByUUID(req.params.uuidExploration);
+
+    if(req.query.embed && req.query.embed === 'planet') {
+      options.planet = true;
+    }
+
+    let exploration = await explorationsRepository.retrieveByUUID(req.params.uuidExploration, options);
     if(!exploration) {
         return next(HttpError.NotFound(`L'exploration avec le uuid ${req.params.uuidExploration} n'existe pas.`));
     }
 
     exploration = exploration.toObject({ getters:false, virtuals: false});
-    exploration = explorationRepository.transform(exploration);
+    exploration = explorationRepository.transform(exploration, options);
 
     res.status(200).json(exploration);
 

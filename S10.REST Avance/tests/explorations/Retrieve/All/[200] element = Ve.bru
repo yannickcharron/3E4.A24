@@ -1,0 +1,20 @@
+meta {
+  name: [200] element = Ve
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/explorations?element=Ve
+  body: none
+  auth: none
+}
+
+params:query {
+  element: Ve
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

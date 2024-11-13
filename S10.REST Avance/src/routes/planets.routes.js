@@ -30,19 +30,24 @@ async function getAll(req, res, next) {
 }
 
 async function getOne(req, res, next) {
+  const options = req.transformOptions;
+
   try {
     
-    const retrieveOptions = {};
+    if(req.query.embed && req.query.embed === 'explorations') {
+      options.explorations = true;
+    }
+
     const uuidPlanet = req.params.uuidPlanet;
 
-    let planet = await planetRepository.retrieveByUUID(uuidPlanet, retrieveOptions);
+    let planet = await planetRepository.retrieveByUUID(uuidPlanet, options);
 
     if (!planet) {
       return next(HttpError.NotFound(`La planète avec l'identifiant ${uuidPlanet} n'existe pas`));
     }
 
     planet = planet.toObject({ getters: false, virtuals: true });
-    planet = planetRepository.transform(planet, req.transformOptions);
+    planet = planetRepository.transform(planet, options);
 
     res.status(200).json(planet);
   } catch (err) {

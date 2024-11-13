@@ -1,0 +1,20 @@
+meta {
+  name: [200] - embed planet
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/explorations/ab8e4262-222f-4d52-af57-1d477d9b315f?embed=planet
+  body: none
+  auth: none
+}
+
+params:query {
+  embed: planet
+}
+
+assert {
+  res.status: eq 200
+  res.body: isJson
+}
