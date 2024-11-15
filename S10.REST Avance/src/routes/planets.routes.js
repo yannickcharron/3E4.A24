@@ -5,13 +5,17 @@ import planetRepository from '../repositories/planet.repository.js';
 
 import { handleTemperatureUnitURLParam } from '../middlewares/temperature.unit.middleware.js';
 
+import planetValidators from '../validators/planet.validators.js';
+import validator from '../middlewares/validator.js'
+
 const router = express.Router();
 
-router.post('/', post);
+router.post('/', planetValidators.complete(), validator, post);
 router.get('/', handleTemperatureUnitURLParam, getAll);
 router.get('/:uuidPlanet', handleTemperatureUnitURLParam, getOne);
 router.delete('/:uuidPlanet', deleteOne);
-router.patch('/:uuidPlanet', update)
+router.patch('/:uuidPlanet', planetValidators.partial(), validator, update)
+router.put('/:uuidPlanet', planetValidators.complete(), validator, update)
 
 
 async function getAll(req, res, next) {
@@ -64,16 +68,18 @@ function deleteOne(req, res, next) {
 async function post(req, res, next) {
   try {
 
-    //TODO: Ajouter une validation adéquate
-
     if (Object.keys(req.body).length === 0) {
       return next(HttpError.BadRequest('Impossible de créer une planète sans propriété'));
     }
 
-    //TODO: Limiter la bande passante utilisée pour la réponse
-
     let newPlanet = await planetRepository.create(req.body);
-    
+    res.header('Location', `${process.env.BASE_URL}/planets/${newPlanet.uuid}`);
+
+    //TODO: Limiter la bande passante utilisée pour la réponse
+    if(req.query._body === 'false') {
+      return res.status(204).end();
+    }
+  
     newPlanet = newPlanet.toObject({ getters: false, virtuals: false });
     newPlanet = planetRepository.transform(newPlanet);
 
@@ -90,6 +96,10 @@ async function update(req, res, next) {
     let planet = await planetRepository.update(uuidPlanet, req.body);
     if(!planet) {
       return next(HttpError.NotFound(`La planète avec le uuid: ${uuidPlanet} n'existe pas.`))
+    }
+
+    if(req.query._body === 'false') {
+      return res.status(204).end();
     }
 
     planet = planet.toObject({getters:false, virtuals: false});

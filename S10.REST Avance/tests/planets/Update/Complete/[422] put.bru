@@ -1,10 +1,10 @@
 meta {
-  name: [200]
+  name: [422] put
   type: http
   seq: 1
 }
 
-patch {
+put {
   url: {{base_url}}/planets/64234e69-ca49-4c9e-b468-4048fe49c222
   body: json
   auth: none
@@ -16,7 +16,7 @@ body:json {
     "position": {
       "x":90,
       "y": -10000,
-      "z": 0
+      "z": "adfsf"
     }
   }
 }
