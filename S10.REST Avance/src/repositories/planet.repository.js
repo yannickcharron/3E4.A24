@@ -25,7 +25,11 @@ class PlanetRepository {
   }
 
   update(planetUUID, planet) {
-    //TODO: Permettre la mise à jour
+      return Planet.findOneAndUpdate(
+        { uuid:planetUUID }, 
+        { $set: Object.assign(planet) }, 
+        { runValidators: true, new: true }
+      );
   }
 
   transform(planet, transformOptions = {}) {

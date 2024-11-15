@@ -11,6 +11,8 @@ router.post('/', post);
 router.get('/', handleTemperatureUnitURLParam, getAll);
 router.get('/:uuidPlanet', handleTemperatureUnitURLParam, getOne);
 router.delete('/:uuidPlanet', deleteOne);
+router.patch('/:uuidPlanet', update)
+
 
 async function getAll(req, res, next) {
 
@@ -82,7 +84,25 @@ async function post(req, res, next) {
 }
 
 //TODO: Mise à jour partielle
+async function update(req, res, next) {
+  try {
+    const uuidPlanet = req.params.uuidPlanet;
+    let planet = await planetRepository.update(uuidPlanet, req.body);
+    if(!planet) {
+      return next(HttpError.NotFound(`La planète avec le uuid: ${uuidPlanet} n'existe pas.`))
+    }
+
+    planet = planet.toObject({getters:false, virtuals: false});
+    planet = planetRepository.transform(planet);
+
+    res.status(200).json(planet);
+
+  } catch (err) {
+    return next(err);
+  }
+}
 
 //TODO: Mise à jour complète
 
 export default router;
+
